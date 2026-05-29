@@ -1,0 +1,13 @@
+[Unit]
+Description=My Web App (Task Tracker)
+After=network.target
+
+[Service]
+User=app
+Group=app
+WorkingDirectory=/opt/myapp
+ExecStart=/opt/myapp/venv/bin/python start.py --db-host {{ hostvars['db-vm']['ansible_host'] }} --db-user myappuser --db-pass myapppassword --db-name mywebapp --port 8000 --bind 127.0.0.1:8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
