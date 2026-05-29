@@ -1,9 +1,16 @@
 ---
-- name: Налаштування веб-серверів (Nginx)
+- name: Базові налаштування (Teacher та Gradebook)
+  hosts: all
+  become: yes
+  roles:
+    - base
+
+- name: Налаштування веб-серверів (Nginx та користувачі)
   hosts: workers
   become: yes
   roles:
     - nginx
+    - app_env
 
 - name: Налаштування серверів баз даних (MariaDB)
   hosts: db

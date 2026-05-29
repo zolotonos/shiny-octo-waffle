@@ -1,0 +1,22 @@
+---
+- name: Створення користувача teacher з паролем та правами sudo
+  user:
+    name: teacher
+    password: "{{ '12345678' | password_hash('sha512') }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+
+- name: Створення користувача student (для папки gradebook)
+  user:
+    name: student
+    create_home: yes
+    shell: /bin/bash
+
+- name: Створення файлу gradebook із варіантом 28
+  copy:
+    content: "28\n"
+    dest: /home/student/gradebook
+    owner: student
+    group: student
+    mode: '0644'

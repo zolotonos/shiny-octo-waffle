@@ -1,0 +1,24 @@
+---
+- name: Створення системного користувача app
+  user:
+    name: app
+    system: yes
+    shell: /usr/sbin/nologin
+
+- name: Створення користувача operator з паролем
+  user:
+    name: operator
+    password: "{{ '12345678' | password_hash('sha512') }}"
+    shell: /bin/bash
+
+- name: Обмеження прав sudo для operator (тільки керування сервісами)
+  copy:
+    dest: /etc/sudoers.d/operator
+    content: |
+      operator ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart myapp.service
+      operator ALL=(ALL) NOPASSWD: /usr/bin/systemctl start myapp.service
+      operator ALL=(ALL) NOPASSWD: /usr/bin/systemctl stop myapp.service
+      operator ALL=(ALL) NOPASSWD: /usr/bin/systemctl status myapp.service
+      operator ALL=(ALL) NOPASSWD: /usr/bin/systemctl reload nginx
+    validate: /usr/sbin/visudo -cf %s
+    mode: '0440'
