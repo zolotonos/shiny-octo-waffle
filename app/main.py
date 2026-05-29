@@ -1,6 +1,5 @@
 import os
-import pymysqlсапо
-са рсіііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііііі
+import pymysql
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)

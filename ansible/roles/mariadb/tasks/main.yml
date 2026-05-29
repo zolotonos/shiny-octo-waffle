@@ -1,12 +1,36 @@
 ---
-- name: Оновлення кешу apt та встановлення MariaDB
+- name: Встановлення MariaDB та python3-pymysql
   apt:
-    name: mariadb-server
+    name:
+      - mariadb-server
+      - python3-pymysql
     state: present
     update_cache: yes
 
-- name: Перевірка, що MariaDB запущена та додана в автозавантаження
+- name: Дозвіл підключень з мережі (bind-address)
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+  notify: restart mariadb
+
+- name: Перевірка, що MariaDB запущена
   service:
     name: mariadb
     state: started
     enabled: yes
+
+- name: Створення бази даних mywebapp
+  mysql_db:
+    name: mywebapp
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Створення користувача БД (доступ ТІЛЬКИ з worker-vm)
+  mysql_user:
+    name: myappuser
+    password: myapppassword
+    host: "{{ hostvars['worker-vm']['ansible_host'] }}"
+    priv: 'mywebapp.*:ALL'
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
