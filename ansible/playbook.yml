@@ -1,0 +1,12 @@
+---
+- name: Налаштування веб-серверів (Nginx)
+  hosts: workers
+  become: yes
+  roles:
+    - nginx
+
+- name: Налаштування серверів баз даних (MariaDB)
+  hosts: db
+  become: yes
+  roles:
+    - mariadb

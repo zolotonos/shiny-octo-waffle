@@ -1,0 +1,12 @@
+---
+- name: Оновлення кешу apt та встановлення MariaDB
+  apt:
+    name: mariadb-server
+    state: present
+    update_cache: yes
+
+- name: Перевірка, що MariaDB запущена та додана в автозавантаження
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
