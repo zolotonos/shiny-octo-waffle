@@ -1,7 +1,8 @@
 ---
-- name: Встановлення Python pip та venv
+- name: Встановлення Python pip, venv та acl
   apt:
     name:
+      - acl
       - python3-pip
       - python3-venv
     state: present
