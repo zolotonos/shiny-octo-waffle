@@ -5,15 +5,16 @@
   roles:
     - base
 
-- name: Налаштування веб-серверів (Nginx та користувачі)
-  hosts: workers
-  become: yes
-  roles:
-    - nginx
-    - app_env
-
 - name: Налаштування серверів баз даних (MariaDB)
   hosts: db
   become: yes
   roles:
     - mariadb
+
+- name: Налаштування веб-серверів
+  hosts: workers
+  become: yes
+  roles:
+    - app_env
+    - webapp
+    - nginx
